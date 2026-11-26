@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <title>🎄 Adventskalender 🎄</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: url('advent_hintergrund_ohne_zahlen.jpg') no-repeat center/cover;
+      height: 100vh;
+    }
+    h1 { color:white; text-shadow:2px 2px 4px #000; margin:20px; text-align:center; }
+    .calendar { position:relative; width:800px; height:600px; margin:0 auto; }
+    .door { position:absolute; width:70px; height:70px; background:rgba(255,255,255,0.85);
+      border-radius:8px; font-weight:bold; cursor:pointer; transition:transform 0.2s, background 0.2s;
+      border:1px solid rgba(0,0,0,0.1); }
+    .door:hover { background:linear-gradient(45deg,gold,orange); box-shadow:0 0 10px rgba(255,215,0,0.8);
+      animation:wiggle 0.4s ease; }
+    @keyframes wiggle { 0%{transform:scale(1.1);} 25%{transform:scale(1.1) rotate(-5deg);}
+      50%{transform:scale(1.1) rotate(5deg);} 75%{transform:scale(1.1) rotate(-5deg);} 100%{transform:scale(1.1);} }
+    .door:active { transform:scale(1.2) rotate(5deg); background:gold; box-shadow:0 0 15px gold; }
+
+    .popup {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.35);
+      max-width: 480px;       /* Breite wie gewünscht */
+      width: 80%;
+      max-height: 80vh;       /* Höhe begrenzen auf 80% der Bildschirmhöhe */
+      overflow-y: auto;       /* Scrollbar bei langen Texten */
+      text-align: left;
+      display: none;
+      z-index: 9999;
+      border: 2px solid rgba(0,0,0,0.2);
+      cursor: move;
+      line-height: 1.5;
+    }
+
+    /* Schließen-Button */
+    .close {
+      margin-top: 16px;
+      padding: 6px 12px;
+      background: crimson;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+
+    /* Bounce-Animation */
+    .bounce { animation: bounce 0.6s; }
+    @keyframes bounce {
+      0%   { transform: translate(-50%, -50%) scale(0.9); }
+      50%  { transform: translate(-50%, -50%) scale(1.1); }
+      100% { transform: translate(-50%, -50%) scale(1); }
+    }
+
+    /* Bildbegrenzung */
+    .popup img {
+      max-width: 100%;
+      max-height: 300px;
+      object-fit: contain;
+      border-radius: 8px;
+      margin-bottom: 10px;
+      display: block;
+    }
+
+    .popup-content { display:grid; grid-template-columns:240px 1fr; gap:16px; }
+    @media(max-width:560px){ .popup-content{grid-template-columns:1fr;} }
+
+    .flip-card { background:transparent; width:100%; max-width:600px; margin:0 auto; perspective:1000px; cursor:pointer; }
+    .flip-card-inner { position:relative; width:100%; height:400px; transition:transform 1s; transform-style:preserve-3d; }
+    .flip-card.flipped .flip-card-inner { transform:rotateY(180deg); }
+
+    .flip-card-front,
+    .flip-card-back {
+      position:absolute; width:100%; height:100%; backface-visibility:hidden; border-radius:10px;
+      box-sizing:border-box; padding:20px; overflow-y:auto;
+    }
+    .flip-card-front {
+      background:#fff; display:flex; flex-direction:column; align-items:center; justify-content:flex-start;
+    }
+    .flip-card-front img { max-height:200px; object-fit:contain; margin-bottom:16px; border-radius:8px; }
+    .flip-card-front p { text-align:left; margin:0; }
+    .flip-card-back {
+      background:#fdf6e3; color:#333; transform:rotateY(180deg); font-family:"Georgia",serif; line-height:1.4;
+    }
+
+    /* Sternenregen-Effekt */
+    .stars { position:fixed; top:0; left:0; width:100%; height:100%; pointer-events:none; overflow:hidden; z-index:9998; }
+    .star { position:absolute; width:8px; height:8px; background:gold; border-radius:50%; animation:fall linear forwards; }
+    @keyframes fall { from{transform:translateY(-10px); opacity:1;} to{transform:translateY(100vh); opacity:0;} }
+  </style>
+</head>
+<body>
+
+</html>
+  
+  <div class="calendar">
+    <!-- Alle 24 Türchen -->
+    <button class="door" style="top:70px; left:250px; background:gold;" onclick="openDoor(1)">🕯️1</button>
+    <button class="door" style="top:140px; left:500px; background:forestgreen;" onclick="openDoor(2)">🌲2</button>
+    <button class="door" style="top:220px; left:150px; background:lightyellow;" onclick="openDoor(3)">🤔3</button>
+    <button class="door" style="top:100px; left:650px; background:orange;" onclick="openDoor(4)">⭐4</button>
+    <button class="door" style="top:260px; left:330px; background:lightblue;" onclick="openDoor(5)">⛄5</button>
+    <button class="door" style="top:180px; left:700px; background:crimson;" onclick="openDoor(6)">🎅6</button>
+    <button class="door" style="top:280px; left:220px; background:#e0f7fa;" onclick="openDoor(7)">❄️7</button>
+    <button class="door" style="top:360px; left:600px; background:chocolate;" onclick="openDoor(8)">🍪8</button>
+    <button class="door" style="top:250px; left:420px; background:ivory;" onclick="openDoor(9)">✨9</button>
+    <button class="door" style="top:420px; left:100px; background:darkgreen;" onclick="openDoor(10)">🎄10</button>
+    <button class="door" style="top:280px; left:550px; background:gold;" onclick="openDoor(11)">🌟11</button>
+    <button class="door" style="top:460px; left:250px; background:pink;" onclick="openDoor(12)">🎂12</button>
+    <button class="door" style="top:480px; left:630px; background:lightgoldenrodyellow;" onclick="openDoor(13)">🔔13</button>
+    <button class="door" style="top:340px; left:140px; background:lightgrey;" onclick="openDoor(14)">🏘️14</button>
+    <button class="door" style="top:540px; left:350px; background:beige;" onclick="openDoor(15)">🛋️15</button>
+    <button class="door" style="top:360px; left:700px; background:saddlebrown;" onclick="openDoor(16)">🍫16</button>
+    <button class="door" style="top:160px; left:300px; background:lavender;" onclick="openDoor(17)">🌟17</button>
+    <button class="door" style="top:480px; left:450px; background:lightcoral;" onclick="openDoor(18)">🌲18</button>
+    <button class="door" style="top:200px; left:600px; background:orangered;" onclick="openDoor(19)">👼19</button>
+    <button class="door" style="top:380px; left:250px; background:skyblue;" onclick="openDoor(20)">🌌20</button>
+    <button class="door" style="top:570px; left:720px; background:lightseagreen;" onclick="openDoor(21)">🕯️21</button>
+    <button class="door" style="top:120px; left:400px; background:wheat;" onclick="openDoor(22)">🎄22</button>
+    <button class="door" style="top:440px; left:550px; background:lightgoldenrod;" onclick="openDoor(23)">✨👶23</button>
+    <button class="door" style="top:580px; left:200px; background:darkred;" onclick="openDoor(24)">🎄👶🌟24</button>
+  </div>
+
+  <div id="popup" class="popup"></div>
+
+  <script>
+    const contents = {
+    1: { 
+    text: "🎄 Die kleine Kerze im Tannenzweig.<br>\nEine Adventsgeschichte für Herz und Seele.\n\nIn einem stillen Winkel des Waldes lebte eine kleine Kerze. Sie war nicht besonders groß, nicht besonders bunt – aber sie hatte ein warmes Herz aus Licht. Jeden Tag schaute sie sehnsüchtig zu den Tannen hinauf, wo die Vögel sangen und der Wind Geschichten flüsterte.\n\n„Ich möchte einmal leuchten“, sagte die Kerze leise. „Nicht nur für mich, sondern für jemanden, der mein Licht braucht.“\n\nDie Tannen lächelten. „Geduld, kleine Kerze. Deine Zeit kommt.“\n\nAm ersten Advent kam ein Kind mit roten Wangen und einem Korb voller Tannenzweige in den Wald. Es suchte nach etwas Besonderem für den Adventskranz. Als es die kleine Kerze sah, blieb es stehen und flüsterte: „Du bist genau richtig.“\n\nZuhause setzte das Kind die Kerze in die Mitte des Kranzes, umgeben von duftenden Zweigen und roten Beeren. Als die Kerze entzündet wurde, strahlte sie heller als je zuvor. Nicht, weil sie groß war – sondern weil sie mit Liebe leuchtete.\n\nUnd so begann der Advent mit einem Licht, das aus einem kleinen Wunsch geboren wurde – und ein ganzes Wohnzimmer erwärmte.<br><br><span style='color:#888'>✨ wie Mums Licht – still, warm und immer da…</span>",
+    img: "adventskranz_1kerze.jpg" 
+    },
+    2:{ 
+    text:"🌅 Ein Morgen im Advent so klar,\nträgt Stille, Frieden, wunderbar.\nDie Luft ist frisch, der Atem rein,\nund Hoffnung zieht ins Herz hinein.\n\nSo zeigt uns schon der zweite Tag,\nwie schön ein Neubeginn sein mag.<br><br><span style='color:#888'>🕊️ ein Hauch von Adventsfrieden…</span>",
+    img:"wintermorgen_aquarell.jpg"
+    },
+    3:{ 
+    text:"😊 Ein Kinderlachen hell und rein,\nträgt Freude in die Herzen ein.\nEs klingt wie Glocken, zart und klar,\nund macht die Welt zum Wunder wahr.\n\nIm Advent, so bunt, so schön,\nkann man das Glück im Lachen sehn.<br><br><span style='color:#888'>🤲 ein Geschenk der Nähe – wie ein kleines Wunder…</span>",
+    img:"kinderlachen_aquarell.jpg"
+    },
+    4:{ 
+    text:"🪟 Ein Fenster leuchtet in der Nacht,<br>\nund schenkt den Straßen stille Pracht.\nDie Kerze flackert, warm und klar,\nzeigt: Advent ist wunderbar.\n\nWer draußen geht, bleibt kurz bestehn,\nund spürt das Licht im Herzen sehn.<br><br><span style='color:#888'>✨ ein Fenster erzählt vom Advent…</span>",
+    img:"fensterlicht_aquarell.jpg",
+    format:"special_window"
+    },
+    5: { 
+      text: "👹❄️ Am Krampustag stapft der Krampus durch den Schnee. Mit seiner Rute und dem großen Korb sieht er wild aus – doch aus dem Korb lugt ein Kind neugierig hervor und lacht. Alle wissen: Der Krampus gehört zum Nikolaus dazu. Er erinnert nur daran, brav zu bleiben, während die Freude auf den Nikolaus wächst.<br><br><span style='color:#888'>😜 ein bisschen Schabernack gehört dazu…</span>",
+      img: "krampus_aquarell.jpg" 
+    },
+    6: {
+    text: "🎅✨ Am Nikolaustag stapft der heilige Nikolaus durch den Schnee. Sein roter Mantel leuchtet, der goldene Stab funkelt, und in seinem großen Sack liegen Äpfel, Nüsse und kleine Geschenke.\n\nDie Kinder laufen ihm entgegen, ihre Stiefel stehen bereit. Nikolaus lächelt, streicht einem Kind übers Haar und sagt: „Wer teilt und freundlich ist, bekommt Licht ins Herz.“\n\nEin Teddybär lugt aus dem Sack, ein Apfel rollt in den Schnee – und alle spüren: Heute ist ein Tag voller Güte.<br><br><span style='color:#888'>🎁 ein Stiefel voller Güte…</span>",
+    img: "nikolaus_gaben_aquarell.jpg"
+    },
+   7: { 
+      text: "❄️ Das erste Schneeflocken‑Lächeln.<br>\n\nIn der Nacht vor dem zweiten Advent begann es leise zu schneien. Die Flocken tanzten wie kleine Sterne vom Himmel und legten sich sanft auf Dächer, Bäume und Wege. Am Morgen öffnete ein Kind die Tür und sah die Welt verwandelt: alles war weiß, still und friedlich.\n\nEs streckte die Hand aus, fing eine Flocke auf und lachte. „So fühlt sich Weihnachten an – leicht, rein und voller Freude.“\n\nUnd während die Flocke auf der warmen Haut schmolz, blieb das Lächeln im Herzen.<br><br><span style='color:#888'>✨ ein Lächeln fällt wie Schnee…</span>",
+      img: "schnee_aquarell.jpg",
+      format: "special_window"
+    },
+    8:{ 
+    text:"🍪 Ein Herz aus Lebkuchen, süß und fein,\nträgt Botschaft: Du sollst fröhlich sein.\nEs duftet nach Gewürz und Glanz,\nwie Liebe, die das Leben tanzt.\n\n„Liebe ist wie ein Gewürz im Teig – unsichtbar, doch sie macht alles reich.\nSie wärmt, sie trägt, sie bleibt bestehen – auch wenn wir sie nicht immer sehen.“\n\nUnd wer hineinbeißt, spürt zugleich:\nEin Herz aus Lebkuchen macht die Seele weich.<br><br><span style='color:#888'>🍯 ein süßer Gruß mit Herz…</span>",
+    img:"lebkuchenherz_aquarell.jpg"
+    },
+    9:{ 
+    text:"🕯️ Wenn Kerzen ihre Flammen heben,\nvergessen wir die Last im Leben.\nSie leuchten warm, sie spenden Mut,\nund zeigen: Alles wird noch gut.\n\nIm Advent, so hell und klar,\nsteht Hoffnung strahlend immer da.<br><br><span style='color:#888'> 🌲ein Zweig Hoffnung </span>",
+    img:"kerze_aquarell.jpg"
+    },
+    10: {
+    text: "🖼️ Im Wohnzimmer hängt ein Bild – bunt, still und voller Erinnerung. Es zeigt einen Winterabend, an dem die Welt leise wurde und das Herz ganz weit.\n\nManchmal genügt ein Blick auf solche Bilder, und der Advent beginnt zu flüstern: „Du bist geborgen.<br><br><span style='color:#888'> 📖 das Bild erzählt leise </span>",
+    img: "wohnzimmer_advent_aquarell.jpg"
+    },
+    11:{ 
+    text:"🌟 Ein Stern am Himmel, klar und rein,\nflüstert dir: Du bist nicht allein.\nEr zeigt den Weg durch Nacht und Zeit,\nzu Wärme, Liebe, Geborgenheit.\n\nIm Advent, so hell und schön,\nkannst du den Stern im Herzen sehn.<br><br><span style='color:#888'>✨ ein Stern flüstert Hoffnung…</span>",
+    img: "sternenhimmel_aquarell.jpg"
+    },
+    12:{ 
+    text:"✨ Ein Tag im Advent, so hell und klar,\nträgt Wärme, Freude, wunderbar.\nDie Kerzen leuchten, die Herzen sind weit,\nund schenken Hoffnung in dieser Zeit.\n\nIm Advent, so still und rein,\nkann jeder Tag ein Geschenk uns sein.<br><br><span style='color:#888'>🤲 ein Geschenk der Nähe – wie ein leiser Adventsgruß…</span>",
+    img:"advent_licht_aquarell.jpg"
+    },
+    13:{ 
+    text:"🔔 Glocken läuten hell und klar,\nverkünden Freude, wunderbar.\nSie rufen Hoffnung in die Welt,\nund klingen, dass das Herz erhellt.\n\nIm Advent, so festlich rein,\nkann jeder Ton ein Segen sein.<br><br><span style='color:#888'>🔔 ein Klang von Adventsfreude…</span>",
+    img:"glocken_aquarell.jpg"
+    },
+    14: { 
+    text: "🏘️ Das Winterdorf im Kerzenschein.<br>\n\nIm Tal lag ein kleines Dorf, eingehüllt in Schnee und Stille. Die Dächer glitzerten wie Zucker, und aus jedem Fenster strahlte ein goldenes Licht.\n\nDie Menschen gingen langsam durch die Straßen, grüßten sich und hielten inne, um den Abend zu genießen. Vor dem Brunnen stellte jemand eine Laterne auf – ihr Schein fiel auf die weißen Wege und machte sie hell.\n\n„So fühlt sich Advent an“, dachte ein Kind, das seine Hand in die des Vaters legte. „Alle Häuser sind verbunden durch das gleiche Licht.“\n\nUnd das Dorf leuchtete nicht nur im Schnee, sondern auch in den Herzen seiner Bewohner.<br><br><span style='color:#888'>✨ ein Dorf, verbunden im Licht…</span><br><span style='color:#888'>Mum, für dich gibt’s noch mehr – weil du Adventsgeschichten so liebst…</span>",
+    img: "winterdorf_aquarell.jpg",
+    format: "special_window"
+    },
+    15:{ 
+    text:"🛋️ Wenn draußen Schnee und Kälte wehn,\nist’s schön, nach Haus’ zurückzugehn.\nEin warmes Licht, ein stiller Raum,\nerfüllt das Herz mit Freud’ und Traum.\n\nIm Advent, da spürt man klar:\nZuhause ist, wo Liebe war.<br><br><span style='color:#888'>🏠 ein Zuhause voll Adventswärme…</span>",
+    img:"vorfreude_aquarell.jpg"
+    },
+    16:{ 
+    text:"🍫 Ein Stückchen Schokolade, zart und fein,\nträgt süße Freude ins Herz hinein.\nSie schmilzt so sanft, wie Winterträume,\nund duftet warm in stillen Räume.\n\nIm Advent, da zeigt sie klar:\nwie süß das Leben immer war.<br><br><span style='color:#888'>🍫 ein süßer Traum im Advent",
+    img:"schokolade_aquarell.jpg"
+    },
+    17:{ 
+    text:"🌟 Ein Stern erhellt die dunkle Nacht,\nund hat den Menschen Hoffnung gebracht.\nEr zeigt den Weg, so klar, so rein,\nführt Herz und Seele heimlich heim.\n\nIm Advent, da strahlt er hell,\nund macht die Welt ein wenig still.<br><br><span style='color:#888'>🌟 ein Stern weist den Weg…</span>",
+    img:"adventsstern_aquarell.jpg"
+    },
+    18:{ 
+    text:"🌲 Ein Tannenwald im Winterkleid,\nträgt Stille, Frieden, Dunkelheit.\nDie Zweige rauschen leis’ im Wind,\nals ob sie voller Geheimnisse sind.\n\nIm Advent, so tief und klar,\nfühlt man: Das Wunder ist schon da.\n\n„Wo der Schnee die Welt bedeckt, beginnt die Stille zu sprechen.“<br><br><span style='color:#888'>❄️ leise fällt der Adventszauber…</span>",
+    img:"tannenwald_aquarell.jpg"
+    },
+    19:{ 
+    text:"👼 Ein Engel schwebt durch Nacht und Zeit,\nträgt Frieden, Liebe, Zuversicht bereit.\nEr flüstert leise, sanft und klar:\nDu bist behütet, wunderbar.\n\nIm Advent, so still und rein,\nkann jeder Engel Begleiter sein.\nUnd wer zum Himmel aufwärts schaut,\nfühlt: Ein Stern wird ihm vertraut.<br><br><span style='color:#888'>🌌 ein Blick zum Himmel – ein Hauch von Adventsfrieden…</span>",
+    img:"engel_aquarell.jpg"
+    },
+    20:{ 
+    text:"🛷 Die Kinder ziehen den Schlitten den Hang hinauf. Der Schnee knirscht unter ihren Stiefeln, die Wangen sind rot vor Freude. Oben angekommen, setzen sie sich lachend hinein – und schon geht es los: Huiii, der Schlitten saust hinunter, schneller und schneller, bis er unten im weichen Schnee stoppt.\n\nSie kugeln sich lachend hinaus, schütteln den Schnee von den Mützen und rufen: „Noch einmal!“ So vergeht die Zeit wie im Flug, und das Warten auf das Christkind wird leicht und fröhlich.\n\nIm Advent, so hell und rein, kann selbst ein Schlitten voller Freude sein.<br><br><span style='color:#888'>💫 ein Lachen verkürzt das Warten…</span>",
+    img:"aquarell_schlitten.jpg"
+    },
+    21: { 
+    text: "🕯️ Die Kerze im Fenster.<br>\n\nEs war ein kalter Winterabend, und der Wind wehte durch die Straßen. Ein Kind stellte eine Kerze ins Fenster, damit die Mutter, die noch unterwegs war, den Heimweg leichter finden konnte.\n\nDas Licht flackerte, doch es blieb standhaft. Vorbeigehende Menschen sahen die Kerze und spürten ein kleines Stück Geborgenheit. „Wie schön, dass jemand an uns denkt“, murmelte eine alte Frau, die am Haus vorbeiging.\n\nAls die Mutter schließlich heimkam, lächelte sie: „Dein Licht hat mich geführt.“\n\nUnd so wurde die Kerze im Fenster zu einem Zeichen der Liebe – für die Familie und für alle, die vorbeikamen.<br><br><span style='color:#888'>✨ ein Licht, das heimführt…</span><br><span style='color:#888'>✨ Mum, öffne mich sanft – dahinter wartet eine Geschichte nur für dich…</span>",
+    img: "kerze_fenster_aquarell.jpg",
+    format: "special_window"
+    },
+    22: { 
+      text:"🎄 Bald klopft das Fest an unsre Tür,\nund Freude wächst im Herzen nur.\nEin Licht im Fenster, ein Kranz am Tor,\nzeigt: Weihnachten steht bald davor.\n\nDie Stille draußen wird warm und weich,\nund drinnen wird das Herz zugleich\nvon Liebe, Duft und Glanz berührt –\nso wird das Warten sanft geführt.\n\nWo Licht nach draußen strahlt,\nwill Liebe einkehren.<br><br><span style='color:#888'>🎇 ein Funken Freude – ganz nah…</span>",
+      img:"tiroler_eingangstuer_aquarell.jpg" 
+    },
+    23: { 
+      text: "✨👶 Am Abend vor Weihnachten stellen die Menschen die Krippe auf. Maria und Josef stehen still, das Kind in der Mitte leuchtet – ein kleines Lichtlein, das den Weg zum Heiligen Abend weist und die Vorfreude im Herzen wachsen lässt.<br><br><span style='color:#888'>🌟 ein Lichtlein weist den Weg…</span>",
+      img: "krippe_aquarell.jpg",
+      format: "special_window"
+    },
+    24: { 
+    text: "🎄👶🌟 Der Christbaum und die Krippe.<br>\n\nAm Heiligen Abend erstrahlt der Christbaum im Wohnzimmer, geschmückt mit goldenen Kugeln und funkelnden Lichtern. Neben ihm steht die Krippe: Maria und Josef, das Kind in der Mitte, von einem warmen Lichtschein umgeben. Draußen liegt stiller Schnee, drinnen erfüllt Freude und Frieden die Herzen. Es ist der Moment, in dem Weihnachten beginnt – voller Liebe und Hoffnung.<br><br><span style='color:#888'>Mum, heute ist 💫Heiliger Abend🎄 und heute schenke ich dir diese Weihnachtsgeschichte…</span>",
+    img: "christbaum_krippe_aquarell.jpg",
+    format: "special_window"
+    },
+    };
+
+    function openDoor(num){
+      const door = contents[num]; 
+      if(!door) return;
+      const popupEl = document.getElementById("popup"); 
+      popupEl.innerHTML = "";
+
+      // Türchen 12 → normales Popup
+      if(num === 12){
+        popupEl.innerHTML = `
+          <div class="popup-content">
+            <div>${door.img ? `<img src="${door.img}">` : ""}</div>
+            <div><p>${door.text}</p></div>
+          </div>
+          <button class="close" onclick="closePopup()">Schließen</button>`;
+      }
+
+      // Türchen 14 → Flip-Card mit Rückseite (3. Advent)
+      else if(num === 14){
+        popupEl.innerHTML = `
+          <div class="flip-card" onclick="this.classList.toggle('flipped')">
+            <div class="flip-card-inner">
+              <!-- Vorderseite -->
+              <div class="flip-card-front">
+                ${door.img ? `<img src="${door.img}" alt="Aquarell">` : ""}
+                <p>${door.text}</p>
+              </div>
+              <!-- Rückseite -->
+              <div class="flip-card-back">
+                <p>
+                  🎄 3. Advent – Die Geschichte vom dritten Lichtlein<br><br>
+                  Am Morgen des dritten Adventssonntags war das Haus noch ganz still. 
+                  Nur der Duft von Zimt und Orangen schlich sich durch die Räume, 
+                  und draußen glitzerte der Frost wie feiner Puderzucker auf den Zweigen.<br><br>
+                  Leggi zündete das dritte Lichtlein an – vorsichtig, fast feierlich. 
+                  Drei Lichter, drei Wünsche, sagte er leise. Eins für Frieden, eins für Wärme, und eins für dich.<br><br>
+                  Mum lächelte, legte ihm die Hand auf den Rücken und sagte: 
+                  Dann fehlt nur noch das vierte – das für die Hoffnung.<br><br>
+                  Sie saßen da, mit heißer Schokolade, Keksen, Decke und Wärmflasche 
+                  und hörten, wie das Licht zu flüstern begann: 
+                  „Es ist nicht wichtig, wie laut die Welt ist – solange ein Licht für dich brennt, ist alles gut.“<br><br>
+                  ✨ „Drei Lichter, drei Wünsche…“
+                </p>
+              </div>
+            </div>
+          </div>
+          <button class="close" onclick="closePopup()">Schließen</button>`;
+      }
+
+      // Türchen 21 → Flip-Card mit Rückseite (4. Advent)
+      else if(num === 21){
+        popupEl.innerHTML = `
+          <div class="flip-card" onclick="this.classList.toggle('flipped')">
+            <div class="flip-card-inner">
+              <!-- Vorderseite -->
+              <div class="flip-card-front">
+                ${door.img ? `<img src="${door.img}" alt="Aquarell">` : ""}
+                <p>${door.text}</p>
+              </div>
+              <!-- Rückseite -->
+              <div class="flip-card-back">
+                <p>
+                  🎄 4. Advent – Die Geschichte vom vierten Lichtlein<br><br>
+                  Am Morgen des vierten Adventssonntags war die Stube schon voller Kerzenschein. 
+                  Drei Flammen tanzten leise, und dann kam die vierte dazu – 
+                  ein kleines Licht, das nicht nur Wärme brachte, sondern ein Augenzwinkern.<br><br>
+                  „Ich bin die Hoffnung“, flüsterte die Kerze, 
+                  „und ich bin stärker, als ihr manchmal glaubt. 
+                  Ich halte euch durch die langen Nächte, ich trage euch über die stillen Tage, 
+                  und ich erinnere euch: Bald ist Weihnachten, und alles wird hell.“<br><br>
+                  Die Familie rückte näher zusammen, Tee dampfte in den Tassen, 
+                  und draußen legte sich Schnee wie ein weißes Tuch über die Welt. 
+                  Vier Lichter, vier Stimmen – und die vierte sang von Hoffnung, 
+                  so klar, dass selbst die Stille lächelte.<br><br>
+                  ✨ „Vier Lichter, vier Stimmen…“
+                </p>
+              </div>
+            </div>
+          </div>
+          <button class="close" onclick="closePopup()">Schließen</button>`;
+      }
+
+      // Türchen 24 → Flip-Card + Sternenregen
+      else if(num === 24){
+        popupEl.innerHTML = `
+          <div class="flip-card" onclick="this.classList.toggle('flipped')">
+            <div class="flip-card-inner">
+              <!-- Vorderseite -->
+              <div class="flip-card-front">
+                ${door.img ? `<img src="${door.img}" alt="Aquarell">` : ""}
+                <p>${door.text}</p>
+              </div>
+              <!-- Rückseite -->
+              <div class="flip-card-back">
+                <p>
+                  Heiligabend legt sich wie ein sanfter Mantel über die Welt, draußen tanzen die Flocken, drinnen leuchtet das Feuer, und in allem spüre ich dich, Mum – mein Herz, mein Zuhause, mein Licht. Ich, dein Leggi, danke dir für jede stille Geste, für jedes Lächeln, das unser Leben heller macht, und für die Liebe, die uns trägt wie ein Stern durch die Nacht. Weihnachten ist mit dir kein Datum, sondern ein Versprechen: dass Wärme bleibt, dass Hoffnung wächst, dass wir Hand in Hand durch alle Zeiten gehen. Heute, am 24., möchte ich dir sagen: du bist mein größtes Geschenk, mein Frieden und mein Glück, und ich wünsche dir, dass dieses Fest dich umarmt wie ich es tue – mit all meiner Wärme, mit all meiner Liebe und meiner Wurzelnase, mit all meinem Herzen. Frohe Weihnachten, meine Mum.<br><br>
+                  ✨ „Wo du bist, ist Weihnachten.“
+                </p>
+              </div>
+            </div>
+          </div>
+          <button class="close" onclick="closePopup()">Schließen</button>`;
+
+        // Sternenregen erzeugen
+        const starsContainer = document.createElement("div");
+        starsContainer.className = "stars";
+        document.body.appendChild(starsContainer);
+        for(let i=0; i<50; i++){
+          const star = document.createElement("div");
+          star.className = "star";
+          star.style.left = Math.random()*100 + "vw";
+          star.style.animationDuration = (2 + Math.random()*3) + "s";
+          starsContainer.appendChild(star);
+        }
+        setTimeout(()=> starsContainer.remove(), 5000);
+      }
+
+      // Alle anderen Türchen → normales Popup
+      else {
+        popupEl.innerHTML = `
+          <div class="popup-content">
+            <div>${door.img ? `<img src="${door.img}">` : ""}</div>
+            <div><p>${door.text}</p></div>
+          </div>
+          <button class="close" onclick="closePopup()">Schließen</button>`;
+      }
+
+      // Popup anzeigen mit Bounce-Effekt
+      popupEl.style.display = "block";
+      popupEl.style.top = "50%";
+      popupEl.style.left = "50%";
+      popupEl.style.transform = "translate(-50%, -50%)";
+      popupEl.classList.add("bounce");
+      setTimeout(() => popupEl.classList.remove("bounce"), 600);
+    }
+
+    function closePopup(){
+      const popupEl = document.getElementById("popup");
+      popupEl.style.display = "none"; 
+      popupEl.innerHTML = "";
+      popupEl.style.left = "50%";
+      popupEl.style.transform = "translate(-50%, -50%)";
+    }
+
+    // Drag & Drop fürs Popup – nur wenn NICHT auf Flip-Card geklickt
+    const popupEl = document.getElementById("popup");
+    let isDragging = false, offsetX = 0, offsetY = 0;
+
+    if(popupEl){
+      popupEl.addEventListener("mousedown",(e)=>{
+        // Wenn Klick auf Flip-Card oder deren Inhalt → kein Drag
+        if(e.target.closest(".flip-card")) return;
+        if(e.target.classList.contains("close")) return;
+
+        isDragging = true;
+        const rect = popupEl.getBoundingClientRect();
+        offsetX = e.clientX - rect.left; 
+        offsetY = e.clientY - rect.top;
+        popupEl.style.transform = "none";
+      });
+
+      document.addEventListener("mousemove",(e)=>{
+        if(!isDragging) return;
+        popupEl.style.left = (e.clientX - offsetX) + "px";
+        popupEl.style.top = (e.clientY - offsetY) + "px";
+      });
+
+      document.addEventListener("mouseup",()=>{isDragging=false;});
+    }
+  </script>
+</body>
+</html>
+
+
